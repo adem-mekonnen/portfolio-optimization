@@ -1,0 +1,59 @@
+# --- Python & Runtime ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# --- Virtual Environments ---
+# It is crucial NOT to commit your virtual environment
+venv/
+env/
+.env
+.venv/
+
+# --- Jupyter Notebooks ---
+# Ignore checkpoint files created by Jupyter
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# --- Data Files ---
+# Prevent committing large datasets (GitHub has a 100MB limit)
+# We ignore the contents, but you can keep the folders if you add a .gitkeep file
+data/raw/*
+data/processed/*
+data/external/*
+*.csv
+*.xlsx
+*.json
+*.txt
+
+# --- IDE & Editor Settings ---
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+
+# Mac/Windows System Files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- Models ---
+# Ignore large trained model files
+*.h5
+*.keras
+*.pkl
+*.joblib
+models/*
+
+# --- Logs & Temporary Files ---
+*.log
+tmp/
+temp/
+
+# --- Documentation ---
+# If you build docs locally
+site/
