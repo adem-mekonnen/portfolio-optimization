@@ -75,6 +75,5 @@ portfolio-optimization/
 *   **Deep Learning vs Stats:** The LSTM model adapted more quickly to the "regime shifts" in Tesla's 2025 price action compared to the linear nature of SARIMA.
 *   **Backtesting:** The strategy successfully outperformed the benchmark on a total return basis, justifying the use of AI-driven forecasts in asset allocation.
 
----
-*Disclaimer: This project is for educational purposes and does not constitute professional financial advice.*
+Disclaimer: This project is for educational purposes and does not constitute professional financial advice.
 
