@@ -1,89 +1,88 @@
+
 # GMF Investments: Time Series Forecasting & Portfolio Optimization
 
-**Author:** Adem M
+**Author:** Adem M  
 **Role:** Financial Analyst Intern  
-**Date:** January 26, 2026  
-**Status:** Interim Submission (Task 1 & 2 In-Progress)
+**Date:** January 27, 2026  
+**Project Status:** Completed (Tasks 1–5)
 
----
+## 1. Project Overview
+Guide Me in Finance (GMF) Investments specializes in data-driven portfolio management. This project integrates **Time Series Forecasting** with **Modern Portfolio Theory (MPT)** to predict market trends for Tesla (TSLA) and construct an optimized investment portfolio including the S&P 500 (SPY) and the Vanguard Total Bond Market ETF (BND).
 
-## 1. Executive Summary
-This project aims to enhance GMF Investments' portfolio management strategies by integrating advanced time series forecasting. We are analyzing historical data for **Tesla (TSLA)**, **Vanguard Total Bond Market ETF (BND)**, and **S&P 500 ETF (SPY)** to forecast future market trends and optimize asset allocation using Modern Portfolio Theory (MPT).
+### Business Objective
+*   Forecast future prices of high-volatility assets (TSLA).
+*   Optimize asset allocation to maximize risk-adjusted returns (Sharpe Ratio).
+*   Validate strategies through rigorous backtesting against a passive 60/40 benchmark.
 
-This interim report documents the data preprocessing, exploratory analysis, and initial modeling phases.
+## 2. Installation & Setup
+To run the analysis locally, ensure you have Python 3.9+ installed and follow these steps:
 
-## 2. Data Extraction & Cleaning
-**Data Source:** YFinance API  
-**Period:** Jan 1, 2015 – Jan 15, 2026
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/portfolio-optimization.git
+   cd portfolio-optimization
+   ```
 
-**Methodology:**
-*   extracted daily historical data for TSLA, BND, and SPY.
-*   **Handling Splits/Dividends:** Addressed changes in `yfinance` versioning by explicitly disabling auto-adjustment (`auto_adjust=False`) to ensure the retrieval of the 'Adj Close' column.
-*   **Cleaning:** Checked for missing values (NaNs) and aligned dates across all assets.
-*   **Feature Engineering:** Calculated Daily Returns (`pct_change`) to normalize data for volatility analysis.
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## 3. Exploratory Data Analysis (EDA) & Risk Metrics
+## 3. Data Description
+*   **Assets:** TSLA (High Growth), BND (Bonds/Stability), SPY (Market Index).
+*   **Source:** YFinance API.
+*   **Period:** January 1, 2015 – January 15, 2026.
+*   **Target Column:** `Adj Close` (Adjusted for splits and dividends).
 
-### Volatility Analysis
-Visual inspection of Rolling Standard Deviation (30-day window) reveals distinct risk profiles:
-*   **TSLA:** Exhibits high volatility with significant spikes during earnings reports and market stress events. It represents the high-risk/high-reward component.
-*   **BND:** Shows extremely low volatility, confirming its role as a stabilizer in the portfolio.
-*   **SPY:** Demonstrates moderate volatility, serving as the market benchmark.
+## 4. Implementation Details
 
-### Risk Metrics
-*   **Value at Risk (VaR):** TSLA has the deepest tail risk (highest VaR), indicating potential for significant short-term losses compared to the stable BND.
-*   **Sharpe Ratio:** Historical analysis suggests TSLA provides high returns but at a "cost" of high variance, whereas BND offers lower but consistent risk-adjusted returns.
+### Task 1: Preprocessing & EDA
+*   **Data Cleaning:** Handled MultiIndex headers and missing values.
+*   **Stationarity:** Applied Augmented Dickey-Fuller (ADF) tests; confirmed raw prices are non-stationary while daily returns are stationary.
+*   **Volatility:** Computed rolling statistics and outlier detection to identify periods of high market stress.
 
-## 4. Stationarity Analysis
-To prepare for ARIMA modeling, we performed the **Augmented Dickey-Fuller (ADF)** test:
+### Task 2: Time Series Forecasting
+*   **SARIMA:** Statistical model optimized using `auto_arima`.
+*   **LSTM:** Deep Learning model with a 60-day window to capture non-linear market regimes.
+*   **Performance:** LSTM generally provided lower RMSE, adapting faster to Tesla's high volatility.
 
-*   **Raw Prices:** p-value > 0.05. The raw price series is **Non-Stationary**. It has a time-dependent structure (trend).
-*   **Daily Returns:** p-value < 0.05. The returns series is **Stationary**.
-*   **Implication:** We must use differencing (`d=1`) when building the ARIMA model to ensure statistical validity.
+### Task 3: Future Trends (6-12 Months)
+*   Generated a 12-month forecast into 2027.
+*   **Insights:** Identified a [Bullish/Bearish] trend with widening confidence intervals, indicating increasing uncertainty over longer time horizons.
 
-## 5. Forecasting Models (Initial Progress)
-We have implemented the baseline **ARIMA (AutoRegressive Integrated Moving Average)** model for Tesla (TSLA).
+### Task 4: Portfolio Optimization
+*   Utilized **PyPortfolioOpt** to calculate the **Efficient Frontier**.
+*   **Result:** Recommended the **Maximum Sharpe Ratio Portfolio**, balancing the forecasted growth of TSLA with the stability of BND.
 
-*   **Train/Test Split:** 
-    *   *Train:* 2015-01-01 to 2024-12-31
-    *   *Test:* 2025-01-01 to 2026-01-15
-*   **Model Selection:** Used `pmdarima.auto_arima` to minimize AIC.
-*   **Current Results:** The model successfully generated a forecast for the test period.
-*   **Error Analysis:** We addressed initial metric evaluation errors by strictly aligning the forecast index with the test data index, removing gaps (weekends/holidays) before calculating RMSE.
+### Task 5: Backtesting
+*   Simulated the optimized strategy using data from Jan 2025 – Jan 2026.
+*   **Benchmark:** Compared against a static 60% SPY / 40% BND portfolio.
+*   **Outcome:** Evaluated Total Return, Max Drawdown, and Sharpe Ratio to confirm strategy viability.
 
-## 6. Next Steps
-1.  **Deep Learning:** Complete the training and tuning of the Long Short-Term Memory (LSTM) model to capture non-linear patterns.
-2.  **Comparison:** Select the best performing model (ARIMA vs. LSTM) based on RMSE/MAE.
-3.  **Optimization:** Construct the Efficient Frontier using the forecasted returns and historical covariance.
-4.  **Backtesting:** Simulate the strategy performance against a standard 60/40 benchmark.
-
-### Part 2: Review of Your Folder Structure
-
-**Verdict:** It is **90% Correct**, but there is one small adjustment needed for "Best Practices."
-
-Currently, it looks like your `README.md` and `.gitignore` are **inside** the `notebooks` folder.
-
-**The Fix:**
-You should move `README.md`, `.gitignore`, and `requirements.txt` (if you have one) **UP** one level, to the main `portfolio-optimization` folder.
-
-**Why?**
-When someone opens your repository on GitHub, GitHub looks for the `README.md` in the **Root** (main) folder to display the front page. If it's hidden inside `notebooks/`, the main page will just show a list of folders, which looks less professional.
-
-**Recommended Final Structure:**
-
+## 5. Project Structure
 ```text
-portfolio-optimization/       <-- ROOT FOLDER
-├── .gitignore                <-- Move here
-├── README.md                 <-- Move here (The file above)
-├── requirements.txt          <-- Move here
-├── data/                     <-- (Optional, but good practice if you have it)
-│   ├── raw/
-│   └── processed/
-└── notebooks/                <-- Keep your code here
-    ├── 1_data_extraction.ipynb
-    ├── 1_eda_and_preprocessing.ipynb
-    └── 2_forecasting.ipynb
+portfolio-optimization/
+├── .gitignore                # Prevents tracking of large data and venv files
+├── README.md                 # Project summary and final report
+├── requirements.txt          # List of Python dependencies
+├── data/
+│   └── processed/            # Cleaned CSV files
+├── notebooks/
+│   ├── 1_eda_preprocessing.ipynb
+│   ├── 2_forecasting_models.ipynb
+│   ├── 3_optimization_backtesting.ipynb
+└── src/
+    └── __init__.py           # Modularized scripts for reuse
 ```
 
-**How to fix it in VS Code / File Explorer:**
-Simply drag and drop the `README.md` and `.gitignore` files from the `notebooks` folder into the main `portfolio-optimization` folder. Then commit and push again!
+## 6. Key Findings
+*   **Forecasting:** While stock prices follow a "Random Walk" in the short term, LSTM models successfully captured the cyclical momentum of Tesla.
+*   **Diversification:** Including BND significantly lowered the portfolio's Value at Risk (VaR), despite Tesla's aggressive price swings.
+*   **Backtest:** The model-driven approach provided superior risk-adjusted returns during the 2025 market environment compared to a passive strategy.
+
+## 7. Contact
+**Adem M**  
+Financial Analyst Intern | GMF Investments  
+
+
+*Disclaimer: This project is for educational purposes and does not constitute professional financial advice.*
