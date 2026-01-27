@@ -14,7 +14,8 @@ jobs:
       - name: Checkout code
         run: |
           git clone https://github.com/${{ github.repository }} .
-          git checkout ${{ github.ref_name }}
+          git fetch origin ${{ github.ref }}
+          git checkout FETCH_HEAD
 
       - name: Install Python manually
         run: |
