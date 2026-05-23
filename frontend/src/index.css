@@ -1,0 +1,214 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..800;1,14..32,300..500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ── Surfaces ──────────────────────────────────────────────────────────
+     * Sidebar / Header:  #FFFFFF  — clean white
+     * Body canvas:       #F8FAFC  — Slate-50, prevents eye strain
+     * Cards:             #FFFFFF  — pure white with border + shadow
+     * Hover rows:        #F1F5F9  — Slate-100
+     * Active rows:       #EFF6FF  — Blue-50
+     */
+    --bg:        #F8FAFC;
+    --surface-0: #F8FAFC;
+    --surface-1: #FFFFFF;   /* sidebar, topbar, cards */
+    --surface-2: #FFFFFF;   /* nested panels */
+    --surface-3: #F1F5F9;   /* inputs, hover rows */
+    --surface-4: #EFF6FF;   /* active / selected rows */
+
+    /* ── Borders ── */
+    --border:    #E2E8F0;   /* Slate-200 */
+    --border-2:  #CBD5E1;   /* Slate-300 */
+    --border-3:  #94A3B8;   /* Slate-400 */
+
+    /* ── Text ── */
+    --text-1:    #0F172A;   /* Slate-900 — primary headings, prices */
+    --text-2:    #475569;   /* Slate-600 — nav, sub-labels */
+    --text-3:    #94A3B8;   /* Slate-400 — muted labels, footer */
+    --text-4:    #CBD5E1;   /* Slate-300 — placeholder */
+
+    /* ── Semantic ── */
+    --gain:      #16A34A;   /* Green-700 — readable on white */
+    --loss:      #DC2626;   /* Red-600 */
+    --info:      #1D4ED8;   /* Blue-700 — corporate royal blue */
+    --warn:      #D97706;   /* Amber-600 */
+    --purple:    #7C3AED;   /* Violet-600 */
+
+    /* ── Accent ── */
+    --blue:      #1D4ED8;   /* Blue-700 — primary CTA */
+    --blue-2:    #2563EB;   /* Blue-600 — hover */
+
+    /* ── Shadows — light mode: soft, not dark ── */
+    --shadow-sm: 0 1px 2px rgba(15,23,42,0.06), 0 1px 3px rgba(15,23,42,0.08);
+    --shadow-md: 0 4px 6px rgba(15,23,42,0.05), 0 2px 4px rgba(15,23,42,0.06);
+    --shadow-lg: 0 10px 15px rgba(15,23,42,0.08), 0 4px 6px rgba(15,23,42,0.05);
+
+    /* ── shadcn compat ── */
+    --background:            210 40% 98%;
+    --foreground:            222 47% 11%;
+    --card:                  0 0% 100%;
+    --card-foreground:       222 47% 11%;
+    --popover:               0 0% 100%;
+    --popover-foreground:    222 47% 11%;
+    --primary:               224 76% 48%;
+    --primary-foreground:    0 0% 100%;
+    --secondary:             210 40% 96%;
+    --secondary-foreground:  222 47% 11%;
+    --muted:                 210 40% 96%;
+    --muted-foreground:      215 16% 47%;
+    --accent:                210 40% 96%;
+    --accent-foreground:     222 47% 11%;
+    --destructive:           0 72% 51%;
+    --destructive-foreground:0 0% 100%;
+    --border:                214 32% 91%;
+    --input:                 214 32% 91%;
+    --ring:                  224 76% 48%;
+    --radius:                0.5rem;
+  }
+}
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text-1);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    overflow-y: scroll;
+  }
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar        { width: 4px; height: 4px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: #CBD5E1; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+/* ── Range inputs ── */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    to right,
+    var(--blue-2) 0%,
+    var(--blue-2) var(--range-pct, 0%),
+    #E2E8F0 var(--range-pct, 0%),
+    #E2E8F0 100%
+  );
+  height: 3px;
+  border-radius: 99px;
+  transition: background 0.1s;
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--blue-2);
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 0 0 1px #CBD5E1;
+  margin-top: -5.5px;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+input[type='range']::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+input[type='range']::-moz-range-track {
+  background: #E2E8F0;
+  height: 3px;
+  border-radius: 99px;
+}
+input[type='range']::-moz-range-progress {
+  background: var(--blue-2);
+  height: 3px;
+  border-radius: 99px;
+}
+input[type='range']::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--blue-2);
+  border: 2px solid #FFFFFF;
+  transition: transform 0.1s;
+}
+
+/* ── Skeleton shimmer — light mode ── */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #F1F5F9 0%,
+    #E2E8F0 40%,
+    #F1F5F9 80%
+  );
+  background-size: 600px 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: 3px;
+}
+
+/* ── Ping animation ── */
+@keyframes ping {
+  75%, 100% { transform: scale(2.2); opacity: 0; }
+}
+.animate-ping { animation: ping 1.4s cubic-bezier(0,0,0.2,1) infinite; }
+
+/* ── Fade-up entry ── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fade-up 0.2s ease-out; }
+
+/* ── Divider ── */
+.divider { height: 1px; background: var(--border); }
+
+/* ── Tabular numbers ── */
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* ── Sidebar active left bar ── */
+.nav-active-bar {
+  position: absolute;
+  left: 0;
+  top: 5px;
+  bottom: 5px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--blue);
+}
+
+/* ── Card hover ── */
+.card-hover {
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.card-hover:hover {
+  border-color: var(--border-2) !important;
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Sparkline ── */
+.sparkline { display: block; overflow: visible; }
+
+/* ── Status dot ── */
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}

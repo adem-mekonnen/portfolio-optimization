@@ -1,0 +1,45 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# ── Jupyter / notebooks ───────────────────────────────────────────────────────
+notebooks/
+.ipynb_checkpoints/
+
+# ── Tests (not needed in production image) ───────────────────────────────────
+tests/
+
+# ── Frontend build artefacts (built inside Docker) ───────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# ── Data files (fetched at runtime via yfinance) ─────────────────────────────
+data/
+
+# ── Joblib cache (mounted as a volume) ───────────────────────────────────────
+.cache/
+
+# ── Git & CI ──────────────────────────────────────────────────────────────────
+.git/
+.github/
+.gitignore
+
+# ── IDE & OS ──────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ── Docs ──────────────────────────────────────────────────────────────────────
+README.md
+*.md

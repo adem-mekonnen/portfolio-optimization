@@ -1,0 +1,69 @@
+# ── GMF Investments — full-stack compose ─────────────────────────────────────
+#
+# Usage:
+#   docker compose up --build          # first run (builds images)
+#   docker compose up                  # subsequent runs
+#   docker compose down                # stop & remove containers
+#   docker compose down -v             # also remove named volumes
+#
+# Environment variables (override in a .env file at the repo root):
+#   VITE_API_URL   URL the browser uses to reach the backend API
+#                  Default: http://localhost:8000  (direct backend port)
+#                  Set to http://localhost/api     if routing through nginx proxy
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── FastAPI backend ─────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: gmf_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persist joblib cache across restarts so yfinance data isn't re-fetched
+      - cache_data:/app/.cache
+    environment:
+      # Disable TF GPU warnings in a CPU-only container
+      - TF_CPP_MIN_LOG_LEVEL=3
+      - TF_ENABLE_ONEDNN_OPTS=0
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')"]
+      interval: 15s
+      timeout: 5s
+      start_period: 40s
+      retries: 5
+    networks:
+      - gmf_net
+
+  # ── React / Vite frontend (served by nginx) ─────────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        # The browser talks directly to the backend port in the default setup.
+        # Change to http://localhost/api if you want everything through nginx.
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+    container_name: gmf_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - gmf_net
+
+# ── Named volumes ─────────────────────────────────────────────────────────────
+volumes:
+  cache_data:
+
+# ── Networks ──────────────────────────────────────────────────────────────────
+networks:
+  gmf_net:
+    driver: bridge

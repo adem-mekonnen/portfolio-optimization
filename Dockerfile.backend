@@ -1,0 +1,45 @@
+# ── Stage 1: builder ─────────────────────────────────────────────────────────
+# Install dependencies into a separate layer so the final image stays lean.
+FROM python:3.11-slim AS builder
+
+WORKDIR /install
+
+# System deps needed to compile some Python packages (scipy, etc.)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        build-essential \
+        gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY backend_requirements.txt .
+RUN pip install --upgrade pip \
+ && pip install --prefix=/install/packages --no-cache-dir -r backend_requirements.txt
+
+
+# ── Stage 2: runtime ─────────────────────────────────────────────────────────
+FROM python:3.11-slim AS runtime
+
+WORKDIR /app
+
+# Copy installed packages from builder
+COPY --from=builder /install/packages /usr/local
+
+# Copy application source
+COPY src/ ./src/
+COPY models/ ./models/
+
+# joblib cache lives here; mount as a volume in compose for persistence
+RUN mkdir -p /app/.cache
+
+# Non-root user for security
+RUN useradd --no-create-home --shell /bin/false appuser \
+ && chown -R appuser:appuser /app
+USER appuser
+
+# Expose FastAPI port
+EXPOSE 8000
+
+# Health-check so compose knows when the API is ready
+HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')"
+
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
