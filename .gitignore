@@ -26,7 +26,6 @@ data/external/*
 *.csv
 *.xlsx
 *.json
-*.txt
 
 # --- IDE & Editor Settings ---
 # VS Code
