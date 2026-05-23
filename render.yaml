@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: gmf-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile.backend
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: TF_CPP_MIN_LOG_LEVEL
+        value: "3"
+      - key: TF_ENABLE_ONEDNN_OPTS
+        value: "0"
+      - key: CORS_ORIGINS
+        value: "https://portfolio-optimization.vercel.app,http://localhost:5173"
+    healthCheckPath: /docs
