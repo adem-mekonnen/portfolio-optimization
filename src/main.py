@@ -60,11 +60,11 @@ def _validate_ticker(ticker: str) -> str:
 #   CORS_ORIGINS=http://localhost,http://localhost:5173,https://app.example.com
 #
 # If the variable is not set, the default covers local development only.
-_raw_origins = os.getenv(
-    "CORS_ORIGINS",
-    "http://localhost,http://localhost:5173,http://localhost:4173,http://127.0.0.1:5173",
+_raw_origins = os.getenv("CORS_ORIGINS", "*")
+ALLOWED_ORIGINS: list[str] = (
+    ["*"] if _raw_origins.strip() == "*"
+    else [o.strip() for o in _raw_origins.split(",") if o.strip()]
 )
-ALLOWED_ORIGINS: list[str] = [o.strip() for o in _raw_origins.split(",") if o.strip()]
 
 
 # ── App lifespan (startup / shutdown) ─────────────────────────────────────────
@@ -82,7 +82,7 @@ app = FastAPI(title="GMF Investments API", version="1.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=False,   # No cookies / auth headers — safe to keep False
+    allow_credentials=False,
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type", "Accept"],
 )
