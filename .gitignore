@@ -25,7 +25,6 @@ data/processed/*
 data/external/*
 *.csv
 *.xlsx
-*.json
 
 # --- IDE & Editor Settings ---
 # VS Code
